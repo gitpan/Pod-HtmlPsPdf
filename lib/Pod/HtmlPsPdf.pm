@@ -1,12 +1,12 @@
 package Pod::HtmlPsPdf;
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 =head1 NAME
 
 Pod::HtmlPsPdf - documentation projects builder in HTML, PS and PDF formats
 
-=head1 SYNOPSYS
+=head1 SYNOPSIS
 
   pod2hpp [options] configuration_file_location
 

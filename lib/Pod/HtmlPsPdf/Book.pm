@@ -115,6 +115,13 @@ sub create_html_version{
     my $curr_page = "$basenames[$i].html";
     my $curr_page_index = $i+1;
 
+    # adjust the links for prev/next for sources files with sub-dirs
+    # ./foo/tar/bar.html" => "../../foo/tar/bar.html"
+    $prev_page =~ s|^\./||; # strip the leading './'
+    $prev_page = "../" x ($prev_page =~ tr|/|/|) . $prev_page;
+    $next_page =~ s|^\./||; # strip the leading './'
+    $next_page = "../" x ($next_page =~ tr|/|/|) . $next_page;
+
       # convert pod to html
     if ($file =~ /\.pod/) {
 
@@ -412,7 +419,7 @@ sub validate_links{
   }
 
   print $count
-    ? "!!! $count anchors were broken\n"
+    ? "!!! $count anchors are broken\n"
     : "!!! Nothing broken\n";
 
 } # end of sub validate_links

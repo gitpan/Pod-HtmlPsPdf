@@ -4,4 +4,14 @@
 
 * First version released
 
+=head1 ver 0.02 -- Sat Aug 26 18:34:16 CEST 2000
+
+* now handling correctly internal links between htmls for source pods
+  with subdirs. (Next|Prev)
+
+* An Edge problem was fixed. Now the html generated for the first file
+  in the list of sources doesn't have the 'Prev' link and the
+  generated for the last one in the list, doesn't have the 'Next'
+  link.
+
 =cut

@@ -203,8 +203,28 @@ USAGE
 
 __END__
 
-=head1 SEE
+=head1 NAME
 
-perldoc Pod::HtmlPsPdf
+pod2hpp - a script that does documentation projects building in HTML, PS and PDF formats
+
+=head1 SYNOPSIS
+
+  pod2hpp [options] configuration_file_location
+
+=head1 DESCRIPTION
+
+See C<Pod::HtmlPsPdf>
+
+=head1 AUTHOR
+
+Stas Bekman <stas@stason.org>
+
+=head1 COPYRIGHT
+
+This program is distributed under the Artistic License, like the Perl
+itself.
+
+=cut
+
 
 =cut

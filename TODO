@@ -1,3 +1,5 @@
+* Pod::HtmlPsPdf doesn't handle correctly internal links between htmls
+for source pods with subdirs. (Next|Prev)
 
 ======================================================================
 Need to find a way to put the files:

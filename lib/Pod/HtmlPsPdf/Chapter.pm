@@ -304,8 +304,14 @@ sub template2release{
 
   my %replace_map = 
     (
-     PREVPAGE => qq{<a href="$self->{prev_page}">Prev</a>},
-     NEXTPAGE => qq{<a href="$self->{next_page}">Next</a>},
+     PREVPAGE => ($self->{prev_page} 
+                  ? qq{<a href="$self->{prev_page}">Prev</a>}
+                  : ''
+                  ),
+     NEXTPAGE => ($self->{next_page} 
+                  ? qq{<a href="$self->{next_page}">Next</a>}
+                  : ''
+                  ),
      TITLE    => $self->{title},
      INDEX    => $self->{index},
      BODY     => $self->{body},
@@ -611,8 +617,14 @@ sub split_template2release{
   my %replace_map = 
     (
      PAGE     => $full_file_name,
-     PREVPAGE => qq{<a href="$self->{prev_page}">Prev</a>},
-     NEXTPAGE => qq{<a href="$self->{next_page}">Next</a>},
+     PREVPAGE => ($self->{prev_page} 
+                  ? qq{<a href="$self->{prev_page}">Prev</a>}
+                  : ''
+                  ),
+     NEXTPAGE => ($self->{next_page} 
+                  ? qq{<a href="$self->{next_page}">Next</a>}
+                  : ''
+                  ),
      FULLTITLE=> $self->{full_title},
      TITLE    => $self->{title},
 #     INDEX    => $self->{index},

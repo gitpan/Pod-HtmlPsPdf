@@ -1134,14 +1134,18 @@ sub process_example {
 
 #
 # process_figure - process a =figure newpod tag.
-# =figure 1.1 This is a title
+# =figure fig1.1.png This is a title
 # becomes
-# <p><center><img src="fig1.1.gif"></center></p>
+# <p><center><img src="fig1.1.png"></center></p>
 # <p><center><b>Figure 1.1: This is a title</b></center></p>
 #
+# the id extracted automatically from the image name
+#
 sub process_figure {
-    my($index, $title) = @_;
-    $OUT .= qq{<p><center><img src="fig$index.gif"></center></p>
+    my($filename, $title) = @_;
+    my ($index) = $filename =~ /([\.\d]*?)(?:\.\w+)$/;
+    $index ||= '';
+    $OUT .= qq{<p><center><img src="$filename"></center></p>
                <p><center><b>Figure $index: $title</b></center></p>
               };
 }

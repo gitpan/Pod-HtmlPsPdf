@@ -1,5 +1,27 @@
 =head1 CHANGES 
 
+=head1 ver 0.04
+
+* changed s/\\240\\240/\\020\\020/ in html2ps perl script, \\240 was
+  producing some Euro chars on DOS platforms.
+
+* added s/\\201(.*?)\\202/\($1\)/g to solve the weird presentation of
+  () on windows in the bookmarks section (Gunther Birzienks)
+
+* modified the Pod::HtmlPsPdf::Html::process_figure() to accept any
+  images and automatically extract the figure index. Note that it
+  breaks the previous syntax. So if you were relying on this feature
+  what you should do is this:
+
+  perl -pi -e 's|=figure\s+(\S+)|=figure fig$1.gif|' filename(s)
+
+  on all files that has this pod tag. And you will get the id coverted
+  into a real filename. See the docs/extended_pod.pod for the info
+  about the new syntax.
+
+* Improved the handling of the slides generation mode. Now you can do
+  2 levels identation. See Pod::HtmlPsPdf::Chapter doc for more info.
+
 =head1 ver 0.03 -- Mon Nov 13 00:54:07 CET 2000
 
 * Fixed the linking between different pages from different directories
@@ -21,7 +43,7 @@
   break before each =head tag.
 
 * s/blue/#eeeeee/ for the code side bar (is supposed to use less ink
-  on the printers, while still having a prominent line).
+  on the printers, while still having a prominent line). (Thanks to T.J. Yang)
 
 =head1 ver 0.02 -- Sat Aug 26 18:34:16 CEST 2000
 

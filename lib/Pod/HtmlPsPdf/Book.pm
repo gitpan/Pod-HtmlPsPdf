@@ -266,7 +266,7 @@ sub create_split_html_version{
 
 # Using the same template file create the long and the short index
 # html files
-###################
+##########################
 sub write_index_html_file{
   my $self = shift;
 

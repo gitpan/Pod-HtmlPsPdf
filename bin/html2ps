@@ -2051,7 +2051,7 @@ while($html=shift @docs) {
       $'=~/\)EH/;
       ($htxt=$hst.$`)=~s/\)EA\(//g;
       if(!$tocdoc) {
-        $toc.="$hl NH le{$nref($hind\\240\\240)$hl C($htxt)$nref 1 TN()EA()BN}if\n";
+        $toc.="$hl NH le{$nref($hind\\020\\020)$hl C($htxt)$nref 1 TN()EA()BN}if\n";
       }
       push(@z1,$nref);
       push(@z2,$hl);
@@ -2059,7 +2059,9 @@ while($html=shift @docs) {
       $htxt=~s/(\s+|\)BR\()/ /g;
       $htxt=~s/(^\s+|\)[^(]*\(|\s+$)//g;
       $htxt="" if(!$latin1);
-      $dh.="/h$nhd [($hind\\240\\240)($htxt)] D\n";
+# GB/STAS: Added to allow balanced parens inside ToC headers
+      while ($htxt =~ s/\\201(.*?)\\202/\($1\)/g) {};
+      $dh.="/h$nhd [($hind\\020\\020)($htxt)] D\n";
     }
     if($tocdoc) {
       if($ndoc==1 && !$first) {

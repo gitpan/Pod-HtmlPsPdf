@@ -37,12 +37,12 @@ DESCRIPTION
 
     5   Complete the POD on the fly from the files in POD format. This is
         used to ease the generating of the presentations slides, so one can
-        use '*' instead of a long =over/=item/.../=item/=back strings. The
+        use "*" instead of a long =over/=item/.../=item/=back strings. The
         rest is done as before. Take a look at the special version of the
         html2ps format to generate nice slides in
         *conf/html2ps-slides.conf*.
 
-    6   If you turn the slides mode on, it automatically turns the '-i' ('*'
+    6   If you turn the slides mode on, it automatically turns the "-i" ("*"
         preprocessing) mode and does a page break before each =head tag.
 
     You can customise the look and feel of the HTML files, PS and therefore
@@ -56,9 +56,9 @@ DESCRIPTION
     converted to PS.
 
     To generate HTML this code use a slightly modified version of the
-    'Pod::Html' code and than does a lot of massage on the resulting HTML.
+    "Pod::Html" code and than does a lot of massage on the resulting HTML.
     I've tried to keep the pod2html code modified as little as possible, so
-    when a new versions of the original 'Pod::Html' module will be released
+    when a new versions of the original "Pod::Html" module will be released
     I'll be able to merge the changes with my version.
 
 EXTENDED POD SYNTAX
@@ -69,7 +69,7 @@ EXTENDED POD SYNTAX
 
 CONFIGURATION
     All you have to prepare is a single config file that you then pass as an
-    argument to 'pod2hpp':
+    argument to "pod2hpp":
 
       pod2hpp [options] /full/path/to/config/file
 
@@ -82,8 +82,8 @@ CONFIGURATION
 
     *sample/README.sample* explains the layout of the directories. The
     easiest way to learn to use this package is to look at the
-    'Apache::mod_perl_guide' package available at CPAN. I've developed the
-    package 'Pod::HtmlPsPdf' especially for 'Apache::mod_perl_guide'.
+    "Apache::mod_perl_guide" package available at CPAN. I've developed the
+    package "Pod::HtmlPsPdf" especially for "Apache::mod_perl_guide".
 
 PREREQUISITES
     All these are not required if all you want is to generate only the html
@@ -104,7 +104,7 @@ SUPPORT
     don't support. So if you have any problem first make sure that it's not
     a problem of these tools.
 
-    Note that while 'html2ps' is included in this distribution, it's written
+    Note that while "html2ps" is included in this distribution, it's written
     in the old style Perl, so if you have patches send them along, but I
     won't try to fix/modify this code otherwise. I didn't write this
     utility.

@@ -84,13 +84,17 @@ becomes:
  
 New pod tag:
 
-  =figure 1.1 This is a title
+  =figure figure1.2.png This is a title
 
- becomes
+becomes:
 
- <p><center><img src="fig1.1.gif"></center></p>
- <p><center><b>Figure 1.1: This is a title</b></center></p>
+ <p><center><img src="figure1.2.png"></center></p>
+ <p><center><b>Figure 1.2: This is a title</b></center></p>
 
+Notice that the digits that number the fugure are extracted
+automatically using the following re:
+
+  $filename =~ /([\.\d]*?)(?:\.\w+)$/
 
 =item * linking to code snippets instead of inlining
 

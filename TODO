@@ -10,6 +10,13 @@ template files are broken. Will have to make these dynamically (i.e.
 replace by place holder and make styles.css a special file.
 
 ======================================================================
+
+Have a problem with ordered_pod_files in .config -- if they have ./
+prefix the index is not getting built correctly, since ./ gets lost in
+toc_file, but still exists in the @ordered_pod_files variable.
+
+======================================================================
+
 Need to find a way to put the files:
 
   sample-config/html2ps-global.conf

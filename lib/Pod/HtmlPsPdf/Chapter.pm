@@ -109,6 +109,25 @@ podify_items() accepts 'C<*>' and digits as bullets
 podify_items() receives a ref to array of paragraphs as a parameter
 and modifies it. Nothing returned.
 
+Moreover, you can use a second level of indentation. So you can have
+
+ * title
+
+ * * item
+
+ * * item
+
+or 
+
+ * title
+
+ * 1 item
+
+ * 2 item
+
+where the second mark is which tells whether to use a ball bullet or a
+numbered item.
+
 =cut
 
 #################
@@ -118,15 +137,27 @@ sub podify_items{
     # tmp result
   my @pars = ();
   my $items = 0;
+  my $second = 0;
   foreach (@{$self->{content}}) {
       # is it an item?
-    if (s/^(\*|\d+)\s+/=item $1\n\n/) {
+      if (/^(\*|\d+)\s+((\*|\d+)\s+)?/){
       $items++;
-        # first time insert the =over pod tag
-      push @pars, "=over 4" if $items == 1;
+          if ($2) {
+              $second++;
+              s/^(\*|\d+)\s+//; # strip the first level shortcut
+              s/^(\*|\d+)\s+/=item $1\n\n/; # do the second
+              s/^/=over 4\n\n/ if $second == 1; # start 2nd level
+          } else {
+              # first time insert the =over pod tag
+              s/^(\*|\d+)\s+/=item $1\n\n/;  # start 1st level
+              s/^/=over 4\n\n/ if $items == 1;
+              s/^/=back\n\n/   if $second; # complete 2nd level
+              $second = 0;               # end 2nd level section
+          }
       push @pars, split /\n\n/, $_;
     } else {
-        # comlete the =over =item =back tag
+        # complete the =over =item =back tag
+      $second=0, push @pars, "=back" if $second; # if 2nd level is not closed
       push @pars, "=back" if $items;
       push @pars, $_;
         # not a tag item
@@ -134,10 +165,9 @@ sub podify_items{
     }
   } # end of foreach (@$r_pars)
 
-    # update the content
-   @{$self->{content}} = @pars;
-} # end of sub podify_items
+  @{$self->{content}} = split /\n\n/, join "\n\n", @pars;
 
+} # end of sub podify_items
 
 # convert POD => HTML
 #############
@@ -326,7 +356,7 @@ sub template2release{
     );
 
   for (@{$ra_tmpl}){
-    s/\[(\w+)\]/$replace_map{$1}/g 
+    s/\[(\w+)\]/$replace_map{$1}/g
   }
 
 } # end of sub template2release

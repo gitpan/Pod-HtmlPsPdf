@@ -1,0 +1,47 @@
+This directory is a sample project that you can start with and then
+modify it to use your files instead.
+
+To test it, first install the Pod::HtmlPsPdf package and then run
+
+  pod2hpp -c /full/path/to/sample/project.conf
+
+
+
+
+./project.conf -- the main config file that you should change
+
+./README.sample -- this file
+
+Sources directory:
+
+./src            -- a sample directory with source pod files
+./src/foo.pod    -- sample pod file
+./src/bar.pod    -- sample pod file
+./src/Version.pm -- project Version file
+
+Templates:
+
+./tmpl                -- templates files directory
+./tmpl/index.tmpl     -- main index file template for HTML version
+./tmpl/indexps.tmpl   -- main index file template for PS/PDF versions
+./tmpl/page.tmpl      -- page file template for HTML version
+./tmpl/pageps.tmpl    -- page file template for PS/PDF version
+./tmpl/splitpage.tmpl -- split pages template file
+
+
+Execution scripts:
+
+./bin/build       -- a sample script for simplifying the running
+
+In the directory conf you will find sample configuration files the
+behavior of html2ps:
+
+conf/html2ps-global.conf -- a global file supplied within the html2ps package
+conf/html2ps-slides.conf -- slides making
+conf/html2ps.conf        -- normal book mode
+conf/html2ps.html        -- html2ps documentation 
+conf/hyphen.tex          -- this file is required by config files
+
+To learn how to modify the default behavior read the html2ps.html. You
+specify the config file to use in the .config file as explained in
+pod2hpp manpage.

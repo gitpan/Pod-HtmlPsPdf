@@ -1,0 +1,11 @@
+=head1 This is file bar
+
+=head1 This is header 1
+
+bar bar
+
+=head1 This is header 2
+
+bar2 bar2
+
+=cut

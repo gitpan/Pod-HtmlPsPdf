@@ -1,0 +1,162 @@
+
+======================================================================
+Need to find a way to put the files:
+
+  sample-config/html2ps-global.conf
+  sample-config/html2ps.html
+  sample-config/hyphen.tex
+
+Into a global directory using the Makefile.PL and make the code find
+them. I don't know how to do it, since I've no idea where these can
+fit on the filesystem.
+
+====================================================================== 
+
+I've included the hyphen.tex in the bundled html2ps info, now I should find out
+how to make the config file to point to it. Will it accept a relative path?
+I'll try
+
+====================================================================== 
+
+if you get a moment speedup a bit the s/// code:
+
+eric:
+
+New version!
+
+Benchmark: timing 5000 iterations of HTML pattern, Non Greedy...
+HTML pattern:  6 wallclock secs ( 5.40 usr +  0.00 sys =  5.40 CPU) @ 926.19/s (n=5000)
+Non Greedy:  7 wallclock secs ( 6.96 usr +  0.00 sys =  6.96 CPU) @ 718.29/s (n=5000)
+
+I felt it was unfair to include the $rexx compilation inside the
+benchmark loop. Also note that I've taken out the (), instead I
+initialize $pre. This assumes that the <pre> tags are correctly
+balanced and not nested.
+
+#!/usr/bin/perl
+
+use Benchmark;
+
+$text = join "\n", map {"<pre>" . "aaaaaaa"x5 . "$_</pre>"} 'aa'..'cc';
+$|=1;
+my $rex = qr!</?pre>!;
+
+sub non_greedy {
+        my $count = 0;
+        $count++ while $text =~ m|<pre>(.*?)</pre>|g;
+}
+sub html_pat {
+        my $count = 0;
+        my $pre = ($text =~ m/^$rex/);
+        for (split $rex, $text) {
+                ++$count if $pre;
+                $pre = !$pre;
+        }
+}
+timethese(5000, {
+        'Non Greedy' => \&non_greedy,
+        'HTML pattern' => \&html_pat,
+
+});
+
+
+
+====================================================================== 
+
+Still broken: links to the code in external files!!!
+
+########################## code references:
+#sub process_code {
+#    my($filename, $comment) = @_;
+#    $OUT .= qq{
+#	       <p><a href="code/$filename"><code>$filename</code></a> -- $comment <i>(Note: See the html version for the source code)</i></p>
+#	      };
+#}
+
+====================================================================== 
+
+I don't think this is important...
+
+########################## 
+#
+# check this difference you made in the two files:
+# 
+
+## pdf
+#    process_text(\$linktext, 0);
+#    if ($link) {
+#	$link =~ s|(\./)+||;
+#	$link =~ s|/+||;
+#	$link =~ s|(\.html)?#|/|;
+#	$link =~ s|^/|$curr_base/|; # normalize internal links
+#	$s1 = "<A HREF=\"$link\">$linktext</A>";
+#    } else {
+
+## html
+#    process_text(\$linktext, 0);
+#    if ($link) {
+#	$s1 = "<A HREF=\"$link\">$linktext</A>";
+#	$link =~ s|(\./)+||;
+#	$link =~ s|/+||;
+#	$link =~ s|(\.html)?#|/|;
+#	$link =~ s|^/|$curr_base/|; # normalize internal links
+#	push @{$r_links_to_check->{$curr_base}}, $link ;
+#    } else {
+
+
+* Guide<->Book difference:
+PS2html:
+
+====================================================================== 
+
+### ps2html TODO ###
+
+code to fix the () problem in the ToC.  I did end up having to figure
+it out afterall since the codewalkthrough part of the WebDB docs has a
+bunch of chapter headings going over each method (eg The new() Method,
+The addRecord() Method, etc).
+
+
+Sample quickie build.pl code:
+
+# Generate PS files
+if ($generate_ps) {
+   make_indexps_file();
+   print "Generating a PostScript\n";
+   my $command = "html2ps -f html2psrc -o $ps_root/temp.ps ";
+   $command .= join " ", map {"$ps_root/$_.html"} "index", @ordered_srcs;
+   print "Doing $command\n";
+   system $command;
+   open PSFILE, "<$ps_root/temp.ps";
+   open PSFILE2, ">$ps_root/temp2.ps";
+   while (<PSFILE>) {
+     s/\\201\\202/\(\)/;
+     print PSFILE2 $_;
+   }
+   close PSFILE2;
+   close PSFILE;
+   unlink "$ps_root/temp.ps";
+   rename "$ps_root/temp2.ps", "$ps_root/extropia_app_guide.ps";
+}
+
+
+Unlike the spaces problem, I could not solve the () problem in
+html2ps.  Whatever it is doing to replace the () with \240 and \241 is
+not consistent and I end up corrupting the resulting postscript
+code. So what I did was made it open the ps file and filter the ()
+manually (rather than modifying the html2ps code) after it is
+generated but before the PDF generation happens.
+
+> I guess that if we are going to bundle the source of html2ps, it's
+> wiser to fix the innards and not the resulting ps. What do you
+> think? I quess it'd be easy to find the code that generates the TOC
+> and correct it.
+
+It wasn't easy for me. I found the several places where the () were
+being replaced and tried them one by one (and turned off previous
+changes) and what resulted were corrupted files for some reason--
+could be that I dont know enough about postscript. But I wasn't too
+keen on spending a day to solve a problem that is ancillary to getting
+something out.
+
+====================================================================== 

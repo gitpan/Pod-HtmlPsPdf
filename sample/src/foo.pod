@@ -1,0 +1,11 @@
+=head1 This is file foo
+
+=head1 This is header 1
+
+foo foo
+
+=head1 This is header 2
+
+foo2 foo2
+
+=cut

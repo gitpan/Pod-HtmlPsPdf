@@ -12,19 +12,19 @@ my $config = Pod::HtmlPsPdf::Config->new();
 ########
 sub new{
     my $class = shift;
-    
+
     # book object
     my $book_obj = shift;
-    
-    my ($file_name, $src_root, $src_file, $verbose, $curr_page,
-	$curr_page_index, $prev_page, $next_page) = @_;
-    
+
+    my ($file_name, $src_root, $src_file, $verbose, $doc_root,
+        $curr_page, $curr_page_index, $prev_page, $next_page) = @_;
+
     # extract the base name
     my ($base_name) = ($file_name =~ /([^.]+)/);
-    
+
     # make it html ext if it was a pod
     $file_name =~ s/\.pod$/.html/;
-    
+
     my $self = bless {
 		      book_obj  => $book_obj,
 		      base_name => $base_name,
@@ -36,6 +36,7 @@ sub new{
 		      curr_page_index => $curr_page_index,
 		      prev_page => $prev_page,
 		      next_page => $next_page,
+                      doc_root  => $doc_root,
 		      content => [],
 		      title   => '',
 		      body    => '',
@@ -142,7 +143,6 @@ sub podify_items{
 #############
 sub pod2html{
   my $self = shift;
-  my $htmlroot = '.';
   my @podpath = qw(.);
 
   my $book_obj = $self->{book_obj};
@@ -151,12 +151,10 @@ sub pod2html{
 
 #  print "###: $rh_valid_anchors, $rh_links_to_check\n";
 
-  
-
       # @content enters as pod, when returns - it's html
   Pod::HtmlPsPdf::Html::pod2html(\@podpath,
 			      $self->{src_root},
-			      $htmlroot,
+			      $self->{doc_root},
 			      $self->{verbose},
 			      $self->{content},
 			      $rh_main_toc,
@@ -180,6 +178,8 @@ sub parse_html{
   # extract the body 
   my ($title) = ($content =~ m|<TITLE>(.*)</TITLE>|si);
   my ($body)  = ($content =~ m|<BODY[^>]*>(.*)</BODY>|si);
+  $title ||= '';
+  $body  ||= '';
 
   # extract index
   my $index = 
@@ -198,7 +198,7 @@ sub parse_html{
     <table>
       <tr>
 
-	<td bgcolor="blue" width="1">
+	<td bgcolor="#eeeeee" width="1">
 	  &nbsp;
         </td>
 
@@ -279,8 +279,14 @@ sub write_ps_html_file{
   ### apply html PS version specific changes
 
   for (@page_tmpl){
+ 
+    if ($Pod::HtmlPsPdf::RunTime::options{slides_mode}) {
+      # create the page breakers for slides 
+      s|<HR>|<HR class=PAGE-BREAK>|gsi;
+    } else {
       # remove the <HR> tags
-    s|<HR>||gsi;
+      s|<HR>||gsi;
+    }
 
       # bump up the $digit in the <h$digit></h$digit> by one to create a
       # nice structured PS/PDF, must skip the first <h1> standing for
@@ -304,6 +310,7 @@ sub template2release{
 
   my %replace_map = 
     (
+     DOC_ROOT => $self->{doc_root},
      PREVPAGE => ($self->{prev_page} 
                   ? qq{<a href="$self->{prev_page}">Prev</a>}
                   : ''
@@ -617,6 +624,7 @@ sub split_template2release{
   my %replace_map = 
     (
      PAGE     => $full_file_name,
+     DOC_ROOT => $self->{doc_root},
      PREVPAGE => ($self->{prev_page} 
                   ? qq{<a href="$self->{prev_page}">Prev</a>}
                   : ''

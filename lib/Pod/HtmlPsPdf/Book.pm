@@ -115,26 +115,38 @@ sub create_html_version{
     my $curr_page = "$basenames[$i].html";
     my $curr_page_index = $i+1;
 
-    # adjust the links for prev/next for sources files with sub-dirs
-    # ./foo/tar/bar.html" => "../../foo/tar/bar.html"
-    $prev_page =~ s|^\./||; # strip the leading './'
-    $prev_page = "../" x ($prev_page =~ tr|/|/|) . $prev_page;
-    $next_page =~ s|^\./||; # strip the leading './'
-    $next_page = "../" x ($next_page =~ tr|/|/|) . $next_page;
+    my $doc_root = "./";
+    $curr_page =~ s|^\./||; # strip the leading './'
+    $doc_root .= "../" x ($curr_page =~ tr|/|/|);
+    $doc_root =~ s|/$||; # remove the last '/'
+
+    # adjust the links for prev/next for sources files relative to the
+    # current doc
+    if ($prev_page) {
+        $prev_page =~ s|^\./||; # strip the leading './'
+        $prev_page = "$doc_root/$prev_page";
+    }
+    if ($next_page) {
+        $next_page =~ s|^\./||; # strip the leading './'
+        $next_page = "$doc_root/$next_page";
+    }
 
       # convert pod to html
     if ($file =~ /\.pod/) {
 
-      my $chapter = Pod::HtmlPsPdf::Chapter->new($self,
-					      $file,
-					      $src_root,
-					      $src_file,
-					      $verbose,
-					      $curr_page,
-					      $curr_page_index,
-					      $prev_page,
-					      $next_page,
-					     );
+      my $chapter = Pod::HtmlPsPdf::Chapter->new
+          ($self,
+           $file,
+           $src_root,
+           $src_file,
+           $verbose,
+           $doc_root,
+           $curr_page,
+           $curr_page_index,
+           $prev_page,
+           $next_page,
+          );
+
         # podify
       $chapter->podify_items() 
 	if $Pod::HtmlPsPdf::RunTime::options{podify_items};

@@ -1,5 +1,13 @@
-* Pod::HtmlPsPdf doesn't handle correctly internal links between htmls
-for source pods with subdirs. (Next|Prev)
+Broken things:
+* Duplicated anchors are Ok, and should be made unique by PoD::HTML
+* 'Contents' from deeply nested links is broken 
+* You have to keep style.css in each dir with pods
+* non-pod files, like pdfs and html are not linked to the index.html
+
+The broken things are mostly due to the multi-levelness of the files,
+which wasn't the intention at the guide level. So hardcoded links in the
+template files are broken. Will have to make these dynamically (i.e.
+replace by place holder and make styles.css a special file.
 
 ======================================================================
 Need to find a way to put the files:

@@ -1,6 +1,6 @@
 package Pod::HtmlPsPdf;
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 =head1 NAME
 
@@ -22,6 +22,7 @@ Options:
   -f    force a complete rebuild
   -a    print available hypertext anchors
   -l    do hypertext links validation
+  -e    slides mode (for presentations)
   -m    executed from Makefile (forces rebuild,
 				no PS/PDF file,
 				no tgz archive!)
@@ -57,6 +58,11 @@ to ease the generating of the presentations slides, so one can use
 C<*> instead of a long =over/=item/.../=item/=back strings. The rest
 is done as before. Take a look at the special version of the html2ps
 format to generate nice slides in I<conf/html2ps-slides.conf>.
+
+=item 6 
+
+If you turn the slides mode on, it automatically turns the C<-i> (C<*>
+preprocessing) mode and does a page break before each =head tag.
 
 =back
 

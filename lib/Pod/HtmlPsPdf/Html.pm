@@ -316,16 +316,39 @@ sub pod2html {
 
       # put a title in the HTML file
     $title = '';
-    TITLE_SEARCH: {
-	for (my $i = 0; $i < @poddata; $i++) { 
-	    if ($poddata[$i] =~ /^=head1\s*(.*)/) {
-	      # remove the title so it wouldn't show up among the
-	      # section names!
-	      shift @poddata;
-	      $title = $1, last TITLE_SEARCH;
-	    }
-	}
+    my $title_sec = '';
+
+    # find the beginning of the pod
+    for (my $i = 0; $i < @poddata; $i++) {
+        $title_sec = shift @poddata;
+        last if $title_sec =~ s/^=head1\s*(NAME)?//;
     }
+
+    # grab the first section
+    while (1) {
+        last unless $poddata[0];
+        last if $poddata[0] =~ /^=head/;  # stop on the next section beginning
+        $title_sec .= shift @poddata;     # otherwise grab the title data
+    }
+    # remove any excessive spaces, new lines
+    $title_sec =~ s/\n/ /gs;
+    $title_sec =~ s/\s+/ /g;
+
+    # save away a clean header
+    $title = $title_sec;
+
+#    TITLE_SEARCH: {
+#	for (my $i = 0; $i < @poddata; $i++) { 
+#	    if ($poddata[$i] =~ /^=head1\s*(.*)?/) {
+#	      # remove the title so it wouldn't show up among the
+#	      # section names!
+#	      shift @poddata;
+#              my $text = $1 
+#              next if $
+#	      $title = $1, last TITLE_SEARCH if $1;
+#	    }
+#	}
+#    }
 
     # scan the pod for =head[1-6] directives and build an index
     my $index = scan_headings(\%sections, @poddata);

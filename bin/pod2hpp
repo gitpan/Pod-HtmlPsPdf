@@ -58,13 +58,14 @@ my $print_anchors  = 0;  # print the available anchors
 my $validate_links = 0;  # validate %links_to_check against %valid_anchors
 my $makefile_mode  = 0;	 # executed from Makefile (forces rebuild, no
                          # PS/PDF file, no tgz archive created!)
+my $slides_mode    = 0;
 
 ######################################
 ### Process Command Line Arguments
 ######################################
 
 my %opts;
-getopts('hvtpdfalmis', \%opts);
+getopts('hvtpdfalmise', \%opts);
 
 usage() if $opts{h};
 
@@ -78,6 +79,7 @@ if (keys %opts) {   # options given
   $rebuild_all    = $opts{f} || 0; # force
   $print_anchors  = $opts{a} || 0;
   $validate_links = $opts{l} || 0;
+  $slides_mode    = $opts{e} || 0;
   $makefile_mode  = $opts{m} || 0;
 }
 
@@ -89,6 +91,11 @@ if ($makefile_mode) {
   $rebuild_all    = 1;
   $print_anchors  = 0;
   $validate_links = 0;
+}
+
+# in the slides mode we turn preprocessing automatically to be on
+if ($slides_mode) {
+  $podify_items = 1;
 }
 
   # we need a PS version in order to create a pdf
@@ -122,6 +129,7 @@ my %options =
    print_anchors  => $print_anchors,
    validate_links => $validate_links,
    makefile_mode  => $makefile_mode,
+   slides_mode    => $slides_mode,
   );
 
 # make the runtime options available to other packages
@@ -189,6 +197,7 @@ Options:
   -f    force a complete rebuild
   -a    print available hypertext anchors
   -l    do hypertext links validation
+  -e    slides mode (for presentations)
   -m    executed from Makefile (forces rebuild,
 				no PS/PDF file,
 				no tgz archive!)

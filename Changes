@@ -1,8 +1,27 @@
 =head1 CHANGES 
 
-=head1 ver 0.01 -- Sun Aug 20 01:29:55 CEST 2000
+=head1 ver 0.03 -- Mon Nov 13 00:54:07 CET 2000
 
-* First version released
+* Fixed the linking between different pages from different directories
+  on different levels. which has sprung into existence a new template
+  variable which always makes the path correct relative to the
+  absolute root of the documentation project [DOC_ROOT]. See the
+  sample templates for an example of this template placeholder usage.
+
+* Rewrote the title parsing in pod, to parse correctly the standard
+  POD document's first section (which is used for title). (The
+  proprietary simplified syntax
+
+  =head1 This is a title
+
+  works as well.
+
+* Added the slides mode (-e): If you turn the slides mode on, it
+  automatically turns the -i (C<*> preprocessing) mode and does a page
+  break before each =head tag.
+
+* s/blue/#eeeeee/ for the code side bar (is supposed to use less ink
+  on the printers, while still having a prominent line).
 
 =head1 ver 0.02 -- Sat Aug 26 18:34:16 CEST 2000
 
@@ -13,5 +32,9 @@
   in the list of sources doesn't have the 'Prev' link and the
   generated for the last one in the list, doesn't have the 'Next'
   link.
+
+=head1 ver 0.01 -- Sun Aug 20 01:29:55 CEST 2000
+
+* First version released
 
 =cut
